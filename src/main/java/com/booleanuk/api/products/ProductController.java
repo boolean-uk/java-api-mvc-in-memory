@@ -17,7 +17,7 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(Product product){
+    public Product create(@RequestBody Product product){
         return productRepository.create(product);
     }
 
@@ -35,7 +35,7 @@ public class ProductController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Product update(@PathVariable(name = "id") int id, Product product){
+    public Product update(@PathVariable(name = "id") int id, @RequestBody Product product){
         return productRepository.update(id, product);
     }
 

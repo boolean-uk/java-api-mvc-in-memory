@@ -10,6 +10,12 @@ public class ProductRepository {
 
     public ProductRepository(){
         products = new HashMap<>();
+
+        Product firstProduct = new Product("Onion Bagel", "Bagel", 2.54);
+        Product secondProduct = new Product("Black Coffee", "Coffee", 2.20);
+
+        products.put(firstProduct.getId(), firstProduct);
+        products.put(secondProduct.getId(), secondProduct);
     }
 
     public Product create(Product product){
