@@ -7,12 +7,12 @@ public class Product {
     private int id;
     private String name;
     private String category;
-    private double price;
+    private int price;
 
     public Product() {
     }
 
-    public Product(String name, String category, double price) {
+    public Product(String name, String category, int price) {
         id = CURRENT_ID++;
         this.name = name;
         this.category = category;
@@ -44,11 +44,11 @@ public class Product {
         this.category = category;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 }
