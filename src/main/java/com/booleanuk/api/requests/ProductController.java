@@ -1,9 +1,6 @@
 package com.booleanuk.api.requests;
 
-
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -72,7 +69,6 @@ public class ProductController {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists");
             }
         }
-
         return product;
     }
 
