@@ -27,6 +27,17 @@ public class ProductRepository {
         return null;
     }
 
+    public ArrayList<Product> getAll(String category){
+        ArrayList<Product> filteredProducts = new ArrayList<>();
+        for (Product p : this.products) {
+            if (p.getCategory().equalsIgnoreCase(category)){
+                filteredProducts.add(p);
+                return filteredProducts;
+            }
+        }
+        return null;
+    }
+
     public Product update(int id, Product product){
         for (Product p : this.products){
             if (p.getId() == id){
