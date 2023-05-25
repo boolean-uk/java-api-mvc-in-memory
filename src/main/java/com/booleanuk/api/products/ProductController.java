@@ -39,4 +39,10 @@ public class ProductController {
         return productRepository.update(id, product);
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Product delete(@PathVariable(name = "id") int id){
+        return productRepository.delete(id);
+    }
+
 }
