@@ -20,10 +20,11 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody Product product){
-        if(productRepository.create(product)==null){
+        Product created = productRepository.create(product);
+        if(created==null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Price must be an Integer, or something else was provided/Product with provided name already exists.");
-        }
-        return productRepository.create(product);
+
+        return created;
     }
 
     @GetMapping
