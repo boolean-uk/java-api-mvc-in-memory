@@ -1,6 +1,7 @@
 package com.booleanuk.api.products;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ProductRepository {
@@ -16,6 +17,14 @@ public class ProductRepository {
         products.put(newProduct.getId(), newProduct);
 
         return newProduct;
+    }
+
+    public List<Product> getAll(){
+        return products.values().stream().toList();
+    }
+
+    public Product getByID(int id){
+        return products.get(id);
     }
 
 }
