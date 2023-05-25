@@ -1,7 +1,11 @@
 package com.booleanuk.api.products;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProductRepository {
     private List<Product> products;
@@ -14,10 +18,18 @@ public class ProductRepository {
     }
 
     public List<Product> getAll() {
+
         return this.products;
+    }
+    public List<Product> getAllByCategory(String category) {
+
+        return this.products.stream().filter(product -> product.getCategory().equalsIgnoreCase(category)).collect(Collectors.toList());
     }
 
     public Product create(Product product) {
+        if(this.products.stream().anyMatch(product1 -> product1.getName().equals(product.getName()))){
+            return null;
+        }
         this.products.add(product);
         return product;
     }
@@ -27,6 +39,7 @@ public class ProductRepository {
             if(product.getId() == id)
                 return product;
         }
+
         return null;
     }
 
