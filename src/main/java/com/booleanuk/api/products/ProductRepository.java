@@ -1,5 +1,6 @@
 package com.booleanuk.api.products;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,10 @@ public class ProductRepository {
         }
     }
 
-    public Product postProduct(Product product) {
+    public Product postProduct(Product product) throws Exception {
+        if (this.products.stream().anyMatch(p -> p.getName().equals(product.getName()))) {
+            throw new Exception("Product already exists");
+        }
         product.setId(this.products.get(this.products.size() - 1).getId() + 1);
         this.products.add(product);
         return this.products.get(this.products.size() - 1);

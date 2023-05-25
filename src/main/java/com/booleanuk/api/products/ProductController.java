@@ -44,7 +44,11 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product postProduct(@RequestBody Product product) {
-        return repo.postProduct(product);
+        try {
+            return repo.postProduct(product);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     @DeleteMapping("{id}")
