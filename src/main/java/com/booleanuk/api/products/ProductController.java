@@ -33,5 +33,10 @@ public class ProductController {
         return productRepository.getByID(id);
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product update(@PathVariable(name = "id") int id, Product product){
+        return productRepository.update(id, product);
+    }
 
 }

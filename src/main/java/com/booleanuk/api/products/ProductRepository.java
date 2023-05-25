@@ -27,4 +27,18 @@ public class ProductRepository {
         return products.get(id);
     }
 
+    public Product update(int id, Product newProduct){
+        Product old = products.get(id);
+
+        if(old == null) return null;
+
+        old.setName(newProduct.getName());
+        old.setCategory(newProduct.getCategory());
+        old.setPrice(newProduct.getPrice());
+
+        products.replace(id, old);
+
+        return products.get(id);
+    }
+
 }
