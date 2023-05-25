@@ -1,6 +1,8 @@
 package com.booleanuk.api.products;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ProductRepository {
 
@@ -15,6 +17,12 @@ public class ProductRepository {
     }
 
     public Product create(Product product) {
+        for (int i = 0; i < products.size(); i++) {
+            Product exitingProducts = products.get(i);
+            if (Objects.equals(exitingProducts.getName(), product.getName())) {
+                return null;
+            }
+        }
         this.products.add(product);
         return product;
     }
@@ -23,14 +31,19 @@ public class ProductRepository {
         return this.products;
     }
 
+    public ArrayList<Product> read(String category) {
+        return (ArrayList<Product>) this.products.stream().filter(product -> product.getCategory().toLowerCase() == category.toLowerCase()).collect(Collectors.toList());
+    }
+
+
     public Product read(int id) {
         return this.products.stream().filter(product -> product.getId() == id).findFirst().orElse(null);
     }
 
-    public Product update(int id, Product newProduct){
+    public Product update(int id, Product newProduct) {
         for (int i = 0; i < products.size(); i++) {
             Product product = products.get(i);
-            if (product.getId()==id){
+            if (product.getId() == id) {
                 products.get(i).setName(newProduct.getName());
                 products.get(i).setCategory(newProduct.getCategory());
                 products.get(i).setPrice(newProduct.getPrice());
@@ -39,10 +52,11 @@ public class ProductRepository {
         }
         return null;
     }
-    public Product delete(int id){
+
+    public Product delete(int id) {
         for (int i = 0; i < products.size(); i++) {
             Product product = products.get(i);
-            if (product.getId()==id){
+            if (product.getId() == id) {
                 return products.remove(i);
             }
         }
