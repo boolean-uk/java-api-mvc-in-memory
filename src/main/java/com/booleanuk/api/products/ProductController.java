@@ -44,5 +44,4 @@ public class ProductController {
     public Product delete(@PathVariable(name = "id") int id){
         return productRepository.delete(id);
     }
-
 }
