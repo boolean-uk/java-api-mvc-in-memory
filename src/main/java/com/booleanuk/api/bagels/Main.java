@@ -1,4 +1,4 @@
-package com.booleanuk.api;
+package com.booleanuk.api.bagels;
 
 
 import org.springframework.boot.SpringApplication;
