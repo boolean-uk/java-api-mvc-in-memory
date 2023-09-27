@@ -1,5 +1,6 @@
 package com.booleanuk.api.bagels;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -7,11 +8,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/bagel")
 public class BagelController {
-    BagelRepository repository;
 
-    public BagelController() {
-        repository = new BagelRepository();
-    }
+    @Autowired
+    BagelRepository repository;
 
     @GetMapping
     public List<Bagel> getAll() {

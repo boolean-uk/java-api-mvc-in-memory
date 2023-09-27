@@ -1,8 +1,11 @@
 package com.booleanuk.api.bagels;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class BagelRepository {
     private int idCounter = 1;
     private List<Bagel> data = new ArrayList<>();

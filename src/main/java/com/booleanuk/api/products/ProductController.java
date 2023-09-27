@@ -1,5 +1,6 @@
 package com.booleanuk.api.products;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,11 +9,8 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
 
-    ProductRepository repository;
-
-    public ProductController() {
-        repository = new ProductRepository();
-    }
+    @Autowired
+    private ProductRepository repository;
 
     @GetMapping
     public List<Product> getAll() {
