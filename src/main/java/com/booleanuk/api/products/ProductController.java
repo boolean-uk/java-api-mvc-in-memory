@@ -1,13 +1,14 @@
 package com.booleanuk.api.products;
 
 
+import com.booleanuk.api.exceptions.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import static org.springframework.util.StringUtils.hasLength;
 
@@ -20,10 +21,11 @@ public class ProductController {
 //    public ProductController() {
 //        this.productRepository = new ProductRepository();
 //    }
+//    add if errors reoccur
 
     @GetMapping
-    public List<Product> getAll() {
-        return this.productRepository.findAll();
+    public Set<Product> getAll(@RequestParam(required = false) String category) {
+        return this.productRepository.findAll(category);
     }
 
     @GetMapping("/{id}")
@@ -31,7 +33,7 @@ public class ProductController {
         try {
             return this.productRepository.find(id);
         } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Couldn't find the product!");
+            throw new CustomNotFoundException("Product not found.");
         }
 //        catch (Exception e) {
 //            // do something else
@@ -58,8 +60,8 @@ public class ProductController {
         }
         try {
             return this.productRepository.update(id, product.getName(), product.getCategory(), product.getPrice());
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Couldn't find the product!");
+        } catch (CustomNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
