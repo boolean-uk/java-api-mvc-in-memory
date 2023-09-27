@@ -24,6 +24,20 @@ public class ProductRepository {
         return null;
     }
 
+    public ArrayList<Product> getCategory(String category){
+        ArrayList<Product> filtered = new ArrayList<>();
+        for (Product product:products){
+            if (product.getCategory().equalsIgnoreCase(category)){
+                filtered.add(product);
+            }
+        }
+        if (filtered.isEmpty()){
+            return null;
+        }else {
+            return filtered;
+        }
+    }
+
     public Product addNew(Product newProduct) {
         this.products.add(newProduct);
         return this.products.get(this.products.indexOf(newProduct));
@@ -47,4 +61,14 @@ public class ProductRepository {
         }
         return null;
     }
+
+    public boolean checkName(String name) {
+        for (Product product: products){
+            if (product.getName().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
