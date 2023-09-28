@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Repository
 public class ProductRepository {
@@ -12,6 +13,9 @@ public class ProductRepository {
     private List<Product> products = new ArrayList<>();
 
     public Product create(String name, String category, int price) {
+        if (price < 0) {
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
         Product product = new Product(this.idProduct++, name, category, price);
         this.products.add(product);
         return product;
@@ -29,6 +33,9 @@ public class ProductRepository {
     }
 
     public Product update(int id, String name, String category, int price) {
+        if (price < 0) {
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
         for (Product prd : products) {
             if (prd.getId() == id) {
                 prd.setName(name);
