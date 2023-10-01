@@ -27,7 +27,7 @@ public class ProductController {
         Product findProduct =  this.productRepository.find(id);
         if(findProduct == null)
         {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, " NOT FOUND MESSAGE");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
         }
         return findProduct;
     }
@@ -46,7 +46,7 @@ public class ProductController {
         Product newProduct = productRepository.update(product.getName(), product.getPrice(), product.getCategory(), id);
         if(newProduct == null)
         {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, " NOT FOUND MESSAGE");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
         }
         return newProduct;
 
@@ -58,7 +58,7 @@ public class ProductController {
         Product product = this.productRepository.delete(id);
         if(product == null)
         {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, " NOT FOUND MESSAGE");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NOT FOUND");
         }
         return product;
     }
