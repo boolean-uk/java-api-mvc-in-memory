@@ -25,6 +25,12 @@ public class ProductsController {
         return this.theProducts.getOne(id);
     }
 
+    @GetMapping("/category/{catName}")
+    public ArrayList<Product> getOne(@PathVariable String catName) {
+        return this.theProducts.getCategory(catName);
+    }
+
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Product updateProduct(@PathVariable int id, @RequestBody Product product) {
