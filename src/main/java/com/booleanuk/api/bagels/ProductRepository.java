@@ -21,4 +21,12 @@ public class ProductRepository {
         }
         return null;
     }
+
+    public List<Product> getAll() {
+        return this.products;
+    }
+
+    public List<Product> getAll(String category) {
+        return this.products.stream().filter(p->p.getCategory().equalsIgnoreCase(category)).toList();
+    }
 }

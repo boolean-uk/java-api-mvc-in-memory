@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("products")
 public class ProductController {
@@ -23,5 +25,20 @@ public class ProductController {
             return product;
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not found.");
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<Product> getAll(@RequestParam(required = false) String category) {
+        List<Product> productList;
+        if (category == null) {
+            productList = this.theProducts.getAll();
+        }else {
+            productList = this.theProducts.getAll(category);
+        }
+        if (!productList.isEmpty()) {
+            return productList;
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found.");
     }
 }
