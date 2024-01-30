@@ -25,6 +25,16 @@ public class ProductRepository {
         return this.products;
     }
 
+    public List<Product> getAll(String category){
+        List <Product> prodOfCategory = new ArrayList<>();
+        for (Product p : this.products){
+            if(p.getCategory().equalsIgnoreCase(category)){
+                prodOfCategory.add(p);
+            }
+        }
+        return prodOfCategory;
+    }
+
     public Product getOne(int id){
         return this.products.stream()
                 .filter(product -> product.getId() == id)
@@ -33,6 +43,7 @@ public class ProductRepository {
     }
 
     public Product update(int id, Product product){
+
         Product productToUpdate = this.products.stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
