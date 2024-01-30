@@ -51,8 +51,13 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public Product update(@PathVariable int id, @RequestBody Product product){
-        Product productToUpdate = this.repository.update(id, product);
-        if (productToUpdate == null){
+        for (Product p : this.repository.getAll()){
+            if(p.getName().equalsIgnoreCase(product.getName())){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "product named " + product.getName() + " already exists");
+            }
+        }
+
+        if (this.repository.update(id, product) == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product with id: " + id + " was not found");
         }
         return this.repository.getOne(id);

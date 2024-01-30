@@ -45,11 +45,7 @@ public class ProductRepository {
     }
 
     public Product update(int id, Product product){
-        for(Product p : this.products){
-            if(p.getName().equalsIgnoreCase(product.getName())){
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "product named " + product.getName() + " already exists");
-            }
-        }
+
         Product productToUpdate = this.products.stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
