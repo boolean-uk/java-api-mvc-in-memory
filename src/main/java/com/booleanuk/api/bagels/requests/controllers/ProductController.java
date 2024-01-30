@@ -17,10 +17,24 @@ public class ProductController {
         this.theProducts = new ProductRepository();
     }
 
+    /**
+     * @GetMapping
+     *     @ResponseStatus(HttpStatus.OK)
+     *     public List<Product> getAll() {
+     *         return this.theProducts.getAll();
+     *     }
+     * @param category
+     * @return
+     */
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Product> getAll() {
-        return this.theProducts.getAll();
+    public List<Product> getALl(@RequestParam(value = "category", required = false) String category) {
+        if (category != null) {
+            return this.theProducts.getByCategory(category);
+        } else {
+            return this.theProducts.getAll();
+        }
     }
 
     @GetMapping("/{id}")
