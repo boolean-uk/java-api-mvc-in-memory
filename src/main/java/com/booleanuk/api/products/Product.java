@@ -1,10 +1,14 @@
 package com.booleanuk.api.products;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Product {
     private static int counterId = 0;
     private String name;
     private String category;
     private int price;
+    @JsonIgnore
     private int id;
 
     public Product(String name, String category, int price) {
@@ -14,7 +18,8 @@ public class Product {
         this.id = counterId++;
     }
 
-    public int getId() {
+    @JsonProperty("id")
+    public long getId() {
         return id;
     }
 

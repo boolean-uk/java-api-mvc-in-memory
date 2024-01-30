@@ -61,7 +61,7 @@ public class ProductRepository {
         return null;
     }
 
-    public Product getProductWithName(String name) {
+    public Product getProductByName(String name) {
         for(Product product: products) {
             if(product.getName().equalsIgnoreCase(name)) {
                 return product;

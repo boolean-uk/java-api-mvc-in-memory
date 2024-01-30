@@ -37,7 +37,7 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody Product product) {
-        if(theProducts.getProductWithName(product.getName()) != null) {
+        if(theProducts.getProductByName(product.getName()) != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists.");
         }
         return this.theProducts.create(product);
@@ -46,7 +46,7 @@ public class ProductController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Product update(@PathVariable int id, @RequestBody Product product) {
-        Product currentProductWithNewName = theProducts.getProductWithName(product.getName());
+        Product currentProductWithNewName = theProducts.getProductByName(product.getName());
         if(currentProductWithNewName != null && currentProductWithNewName.getId() != id) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists.");
         }
