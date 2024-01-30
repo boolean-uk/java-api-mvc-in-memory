@@ -53,15 +53,17 @@ public class ProductController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Product updateProduct(@PathVariable int id, @RequestBody Product product){
-        Product productToUpdate = this.theProducts.update(id, product);
-        if(productToUpdate == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
-        }
+
         for(Product p : this.theProducts.getAll()){
             if (p.getName().equalsIgnoreCase(product.getName())){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exits");
             }
         }
+       // Product productToUpdate = this.theProducts.update(id, product);
+        if( this.theProducts.update(id, product)== null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+        }
+
 
 
 

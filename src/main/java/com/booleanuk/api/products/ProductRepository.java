@@ -52,8 +52,12 @@ public class ProductRepository {
     }
 
     public Product update(int id, Product updatedProduct){
-
-       Product productToUpdate = this.products.stream()
+//        for(Product p : products){
+//            if (p.getName().equalsIgnoreCase(updatedProduct.getName())){
+//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exits");
+//            }
+//        }
+            Product productToUpdate = this.products.stream()
                .filter(product -> product.getId() == id )
                .findFirst()
                .orElse(null);
