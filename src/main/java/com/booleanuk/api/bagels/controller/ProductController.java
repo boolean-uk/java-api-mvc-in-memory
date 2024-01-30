@@ -22,17 +22,13 @@ public class ProductController {
 
     }
 
-
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public List<Product> getProducts() {
-        return this.productRepository.getAll();
-    }
+    public List<Product> getProducts(@RequestParam(required = false) String category) {
+        if(category == null ) {
+            return this.productRepository.getAll();
 
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping
-    public List<Product> getProducts(@RequestParam String category) {
+        }
         return this.productRepository.getAll(category);
     }
 
