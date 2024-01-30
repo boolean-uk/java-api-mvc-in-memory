@@ -13,14 +13,14 @@ import java.util.List;
 public class ProductController {
     ProductRepository repository;
 
-    public ProductController(ProductRepository repository) {
-        this.repository = repository;
+    public ProductController() {
+        this.repository = new ProductRepository();
     }
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product createProduct(@RequestBody Product productToBeCreated) {
-        validateId(productToBeCreated.getId());
         validateString(productToBeCreated.getName());
         validateString(productToBeCreated.getCategory());
 
@@ -47,7 +47,7 @@ public class ProductController {
         return allProducts;
     }
 
-    @GetMapping("/{category}")
+    @GetMapping("/category/{category}")
     @ResponseStatus(HttpStatus.OK)
     public List<Product> getAllInSpecificCategory(@PathVariable String category) {
         validateString(category);
@@ -61,14 +61,14 @@ public class ProductController {
         return productsOfSpecificCategory;
     }
 
-    @GetMapping("/{id]")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Product getSpecificProduct(@PathVariable int id) {
         validateId(id);
 
-        Product product = this.repository.getSpecificProduct(id);
-
+        Product product = this.repository.find(id);
         searchProduct(product);
+
 
         return product;
     }
@@ -81,10 +81,9 @@ public class ProductController {
         validateString(productToBeUpdated.getCategory());
 
         Product productToSearchFor = this.repository.find(id);
-
         searchProduct(productToSearchFor);
 
-        productAlreadyExists(productToSearchFor);
+        productAlreadyExists(productToBeUpdated);
 
         Product updatedProduct = this.repository.updateProduct(id, productToBeUpdated.getName(), productToBeUpdated.getCategory(), productToBeUpdated.getPrice());
 
@@ -101,16 +100,11 @@ public class ProductController {
         validateId(id);
 
         Product product = this.repository.find(id);
-
         searchProduct(product);
 
-        Product deletedProduct = this.repository.deleteProduct(id);
+        this.repository.deleteProduct(id);
 
-        if(deletedProduct == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product could not be deleted.");
-        }
-
-        return deletedProduct;
+        return product;
     }
 
 
@@ -132,8 +126,8 @@ public class ProductController {
     }
 
     private void productAlreadyExists(Product product) {
-        for(Product p : this.repository.findAll()) {
-            if(p.getName().equalsIgnoreCase(product.getName())) {
+        for (Product p : this.repository.findAll()) {
+            if (p.getName().equalsIgnoreCase(product.getName())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists");
             }
         }

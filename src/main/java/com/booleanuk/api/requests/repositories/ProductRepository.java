@@ -7,17 +7,16 @@ import java.util.List;
 
 public class ProductRepository {
     private int idCounter = 1;
-    private List<Product> products = new ArrayList<>();
+    private List<Product> products;
+
+    public ProductRepository() {
+        products = new ArrayList<>();
+    }
 
     public Product createProduct(String name, String category, int price) {
         Product product = new Product(name, category, price, idCounter++);
         this.products.add(product);
         return product;
-    }
-
-    public void createProduct(String name, String category, int price, int id) {
-        Product product = new Product(name, category, price, id);
-        this.products.add(product);
     }
 
     public List<Product> findAll() {
@@ -28,7 +27,7 @@ public class ProductRepository {
         return this.products.stream()
                 .filter(product -> product.getId() == id)
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     public List<Product> findAllOfSpecificCategory(String category) {
@@ -39,17 +38,6 @@ public class ProductRepository {
             }
         }
         return productsOfSpecificCategory;
-    }
-
-    public Product getSpecificProduct(int id) {
-        Product productToBeReturned = null;
-
-        for(Product product : this.products) {
-            if(product.getId() == id) {
-                productToBeReturned = product;
-            }
-        }
-        return productToBeReturned;
     }
 
     public Product updateProduct(int id, String name, String category, int price) {
