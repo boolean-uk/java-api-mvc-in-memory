@@ -41,11 +41,11 @@ public class ProductController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Product update(@PathVariable(name = "id") int id,@RequestBody Product product) {
-        Product author1 = this.theProducts.update(id,product);
-        if (author1 == null){
+        Product product1 = this.theProducts.update(id,product);
+        if (product1 == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't update the product, because it does not exist");
         }
-        return author1;
+        return product1;
     }
 
     @DeleteMapping("/{id}")
