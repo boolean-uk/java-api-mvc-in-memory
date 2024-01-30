@@ -20,25 +20,13 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product createProduct(@RequestBody Product productToBeCreated) {
-        if(productToBeCreated.getName() == null || productToBeCreated.getCategory() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fields cannot be null.");
-        }
+        validateId(productToBeCreated.getId());
+        validateString(productToBeCreated.getName());
+        validateString(productToBeCreated.getCategory());
 
-        for(Product product : this.repository.findAll()) {
-            if(product.getName().equalsIgnoreCase(productToBeCreated.getName())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists.");
-            }
-        }
+        productAlreadyExists(productToBeCreated);
 
-        this.repository.createProduct(productToBeCreated.getName(), productToBeCreated.getCategory(), productToBeCreated.getPrice());
-
-        Product createdProduct = null;
-
-        for(Product product : this.repository.findAll()) {
-            if(product.getName().equalsIgnoreCase(productToBeCreated.getName())) {
-                createdProduct = product;
-            }
-        }
+        Product createdProduct = this.repository.createProduct(productToBeCreated.getName(), productToBeCreated.getCategory(), productToBeCreated.getPrice());
 
         if(createdProduct == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product could not be created.");
@@ -47,16 +35,22 @@ public class ProductController {
         return createdProduct;
     }
 
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<Product> getAll() {
-        return this.repository.findAll();
+        List<Product> allProducts = this.repository.findAll();
+
+        if(allProducts == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No products were found.");
+        }
+
+        return allProducts;
     }
 
     @GetMapping("/{category}")
     @ResponseStatus(HttpStatus.OK)
     public List<Product> getAllInSpecificCategory(@PathVariable String category) {
-        if(category.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category cannot be null.");
-        }
+        validateString(category);
 
         List<Product> productsOfSpecificCategory = this.repository.findAllOfSpecificCategory(category);
 
@@ -70,15 +64,11 @@ public class ProductController {
     @GetMapping("/{id]")
     @ResponseStatus(HttpStatus.OK)
     public Product getSpecificProduct(@PathVariable int id) {
-        if(id < 1) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id not valid.");
-        }
+        validateId(id);
 
         Product product = this.repository.getSpecificProduct(id);
 
-        if(product == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found.");
-        }
+        searchProduct(product);
 
         return product;
     }
@@ -86,25 +76,15 @@ public class ProductController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Product updateProduct(@PathVariable int id, @RequestBody Product productToBeUpdated) {
-        if(id < 1) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id not valid.");
-        }
-
-        if(productToBeUpdated.getName().isEmpty() || productToBeUpdated.getCategory().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fields cannot be null");
-        }
+        validateId(id);
+        validateString(productToBeUpdated.getName());
+        validateString(productToBeUpdated.getCategory());
 
         Product productToSearchFor = this.repository.find(id);
 
-        if(productToSearchFor == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found.");
-        }
+        searchProduct(productToSearchFor);
 
-        for(Product product : this.repository.findAll()) {
-            if(product.getName().equalsIgnoreCase(productToBeUpdated.getName())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists");
-            }
-        }
+        productAlreadyExists(productToSearchFor);
 
         Product updatedProduct = this.repository.updateProduct(id, productToBeUpdated.getName(), productToBeUpdated.getCategory(), productToBeUpdated.getPrice());
 
@@ -118,15 +98,11 @@ public class ProductController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Product deleteProduct(@PathVariable int id) {
-        if(id < 1) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id not valid.");
-        }
+        validateId(id);
 
         Product product = this.repository.find(id);
 
-        if(product == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found.");
-        }
+        searchProduct(product);
 
         Product deletedProduct = this.repository.deleteProduct(id);
 
@@ -135,5 +111,31 @@ public class ProductController {
         }
 
         return deletedProduct;
+    }
+
+
+    private void validateId(int id) {
+        if(id < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id not valid.");
+        }
+    }
+    private void validateString(String string) {
+        if (string == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, string + " cannot be null.");
+        }
+    }
+
+    private void searchProduct(Product product) {
+        if(product == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found.");
+        }
+    }
+
+    private void productAlreadyExists(Product product) {
+        for(Product p : this.repository.findAll()) {
+            if(p.getName().equalsIgnoreCase(product.getName())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists");
+            }
+        }
     }
 }

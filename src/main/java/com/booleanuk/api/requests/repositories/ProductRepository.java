@@ -9,9 +9,10 @@ public class ProductRepository {
     private int idCounter = 1;
     private List<Product> products = new ArrayList<>();
 
-    public void createProduct(String name, String category, int price) {
+    public Product createProduct(String name, String category, int price) {
         Product product = new Product(name, category, price, idCounter++);
         this.products.add(product);
+        return product;
     }
 
     public void createProduct(String name, String category, int price, int id) {
