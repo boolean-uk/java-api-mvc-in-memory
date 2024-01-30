@@ -4,6 +4,7 @@ import com.booleanuk.api.coreExtension.Item.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ProductRepository {
     private ArrayList<Product> products;
@@ -18,7 +19,28 @@ public class ProductRepository {
     }
 
     public ArrayList<Product> getAll() {
+        if (this.products.isEmpty()){
+            return null;
+        }
         return this.products;
+    }
+    public ArrayList<Product> getCategory(String category) {
+        for (Product product : this.products) {
+            if (product.getCategory().equals(category)) {
+                return product;
+            }
+            return null;
+        }
+        return null;
+    }
+    public Boolean isPresent(int id) {
+        for (Product product : this.products) {
+            if (product.getId() == id) {
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
     public Product getOne(int id) {
         for (Product product : this.products) {
@@ -27,6 +49,13 @@ public class ProductRepository {
             }
         }
         return null;
+    }
+    public Boolean getNamesAndId(String name, int id) {
+        for (Product product : this.products) {
+            if (Objects.equals(product.getName(), name) && !Objects.equals(product.getId(), id));
+            return false;
+        }
+        return true;
     }
     public Product create(Product product) {
         this.products.add(product);
