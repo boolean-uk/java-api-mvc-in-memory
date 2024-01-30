@@ -51,4 +51,14 @@ public class ProductController {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found.");
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Product delete(@PathVariable(name = "id") int id) {
+        Product product = this.theProducts.delete(id);
+        if (product != null) {
+            return product;
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found.");
+    }
 }

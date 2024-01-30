@@ -33,4 +33,12 @@ public class ProductRepository {
     public Product getSpecific(int id) {
         return this.products.stream().filter(p -> p.getId() == id).findFirst().orElse(null);
     }
+
+    public Product delete(int id) {
+        Product product = this.products.stream().filter(p->p.getId() == id).findFirst().orElse(null);
+        if (product != null) {
+            this.products.remove(product);
+        }
+        return product;
+    }
 }
