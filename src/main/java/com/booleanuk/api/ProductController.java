@@ -17,9 +17,12 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getAll(@RequestParam String category){
+    public List<Product> getAll(@RequestParam(required = false) String category){
+        if (category == null){
+            return products.getProducts();
+        }
         return products.getProducts().stream()
-                .filter(product -> product.getCategory().equals(category))
+                .filter(product -> product.getCategory().equals(category.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
