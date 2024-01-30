@@ -1,4 +1,4 @@
-package com.booleanuk.api.bagels.core;
+package com.booleanuk.api.core;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

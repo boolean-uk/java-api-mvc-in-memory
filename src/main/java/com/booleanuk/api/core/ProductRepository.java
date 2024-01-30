@@ -1,4 +1,4 @@
-package com.booleanuk.api.bagels.core;
+package com.booleanuk.api.core;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.booleanuk.api.bagels.core;
+package com.booleanuk.api.core;
 
 public class Product {
     private static int nextID = 1;
