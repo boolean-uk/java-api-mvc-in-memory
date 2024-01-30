@@ -14,5 +14,11 @@ public class ProductRepository {
         this.products.add(new Product("Onion Bagel", "Food", 1000));
     }
 
-
+    public Product create(Product product) {
+        if (this.products.stream().noneMatch(p->p.getName().equals(product.getName()))) {
+            this.products.add(product);
+            return product;
+        }
+        return null;
+    }
 }
