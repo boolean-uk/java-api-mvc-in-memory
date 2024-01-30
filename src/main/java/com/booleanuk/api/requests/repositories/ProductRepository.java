@@ -1,6 +1,8 @@
 package com.booleanuk.api.requests.repositories;
 
 import com.booleanuk.api.requests.models.Product;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,11 @@ public class ProductRepository {
     }
 
     public Product update(int id, Product product){
-
+        for(Product p : this.products){
+            if(p.getName().equalsIgnoreCase(product.getName())){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "product named " + product.getName() + " already exists");
+            }
+        }
         Product productToUpdate = this.products.stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
