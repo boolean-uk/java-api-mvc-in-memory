@@ -1,4 +1,6 @@
-package com.booleanuk.api.core;
+package com.booleanuk.api.coreExtension.Repository;
+
+import com.booleanuk.api.coreExtension.Item.Product;
 
 import java.util.ArrayList;
 import java.util.List;

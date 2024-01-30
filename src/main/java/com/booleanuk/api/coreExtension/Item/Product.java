@@ -1,4 +1,4 @@
-package com.booleanuk.api.core;
+package com.booleanuk.api.coreExtension.Item;
 
 public class Product {
     private static int nextID = 1;

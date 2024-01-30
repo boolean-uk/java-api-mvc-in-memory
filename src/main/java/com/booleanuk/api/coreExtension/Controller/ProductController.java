@@ -1,5 +1,7 @@
-package com.booleanuk.api.core;
+package com.booleanuk.api.coreExtension.Controller;
 
+import com.booleanuk.api.coreExtension.Item.Product;
+import com.booleanuk.api.coreExtension.Repository.ProductRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
