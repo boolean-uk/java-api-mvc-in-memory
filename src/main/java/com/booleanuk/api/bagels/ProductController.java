@@ -61,4 +61,17 @@ public class ProductController {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found.");
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product update(@RequestBody Product reqProduct, @PathVariable(name = "id") int id) {
+        if (this.theProducts.getAll().stream().anyMatch(p->p.getName().equalsIgnoreCase(reqProduct.getName()))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not found.");
+        }
+        Product product = this.theProducts.update(id, reqProduct);
+        if (product != null) {
+            return product;
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found.");
+    }
 }

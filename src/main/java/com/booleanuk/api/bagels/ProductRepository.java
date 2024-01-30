@@ -41,4 +41,14 @@ public class ProductRepository {
         }
         return product;
     }
+
+    public Product update(int id, Product updateProduct) {
+        Product product = this.products.stream().filter(p->p.getId() == id).findFirst().orElse(null);
+        if (product != null) {
+            product.setName(updateProduct.getName());
+            product.setCategory(updateProduct.getCategory());
+            product.setPrice(updateProduct.getPrice());
+        }
+        return product;
+    }
 }
