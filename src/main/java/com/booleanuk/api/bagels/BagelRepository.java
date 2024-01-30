@@ -1,5 +1,7 @@
 package com.booleanuk.api.bagels;
 
+import com.booleanuk.api.bagels.Bagel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,5 +23,23 @@ public class BagelRepository {
                 .filter(bagel -> bagel.getId() == id)
                 .findFirst()
                 .orElseThrow();
+    }
+    public Bagel delete(int id){
+        for(Bagel bagel: this.data){
+            if (bagel.getId()==id){
+                data.remove(bagel);
+                return bagel;
+            }
+        }
+        return null;
+    }
+    public Bagel update(int id, Bagel newBagel){
+        for(Bagel bagel: this.data){
+            if (bagel.getId()==id){
+                data.remove(bagel);
+                return bagel;
+            }
+        }
+        return null;
     }
 }
