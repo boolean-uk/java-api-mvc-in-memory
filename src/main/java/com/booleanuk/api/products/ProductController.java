@@ -32,18 +32,40 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product createProduct(@RequestBody Product author){
-        return this.theProducts.create(author);
+    public Product createProduct(@RequestBody Product product){
+        for (Product currProduct : this.theProducts.getAll()){
+            if (currProduct.getName().equals(product.getName())){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product already exists");
+            }
+        }
+        return this.theProducts.create(product);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Product editProduct(@PathVariable(name = "id") int id, @RequestBody Product author){
-        return this.theProducts.edit(id, author);
+    public Product editProduct(@PathVariable(name = "id") int id, @RequestBody Product product){
+        Product canUpdate = theProducts.getOne(id);
+        boolean productExists = theProducts.getAll().contains(canUpdate);
+        if (!productExists){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Product doesn't exists");
+        }
+
+        for (Product currProduct : theProducts.getAll()){
+            if (currProduct.getName().equals(product.getName())){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Product with same name exists");
+            }
+        }
+        return this.theProducts.edit(id, product);
     }
 
     @DeleteMapping("/{id}")
     public Product deleteProduct(@PathVariable(name="id") int id){
+        Product product = this.theProducts.getOne(id);
+        if (product == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
+        }
         return this.theProducts.delete(id);
     }
 
