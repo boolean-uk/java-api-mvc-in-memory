@@ -1,9 +1,14 @@
+/*
 package com.booleanuk.api.bagels;
 
 public class Bagel {
     private int id;
     private String type;
     private int price;
+
+    public Bagel() {
+
+    }
 
     public Bagel(int id, String type, int price) {
         this.id = id;
@@ -23,3 +28,4 @@ public class Bagel {
         return price;
     }
 }
+*/
