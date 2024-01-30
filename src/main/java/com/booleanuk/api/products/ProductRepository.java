@@ -10,8 +10,19 @@ public class ProductRepository {
         this.products = new ArrayList<>();
     }
 
-    public List<Product> getAll(){
-        return this.products;
+    public List<Product> getAll(String category){
+        List<Product> listBasedOnCategory = new ArrayList<>();
+        if (category == null){
+            return this.products;
+        }
+        else {
+            for (Product product : this.products){
+                if (product.getCategory().equals(category)){
+                    listBasedOnCategory.add(product);
+                }
+            }
+            return listBasedOnCategory;
+        }
     }
 
     public Product getOne(int id){

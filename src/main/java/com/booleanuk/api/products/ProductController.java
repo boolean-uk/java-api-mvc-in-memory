@@ -17,8 +17,12 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getAll() {
-        return this.theProducts.getAll();
+    public List<Product> getAll(@RequestParam (required = false) String category) {
+        List<Product> products = this.theProducts.getAll(category);
+        if (products.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
+        }
+        return products;
     }
 
     @GetMapping("/{id}")
@@ -33,7 +37,7 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product createProduct(@RequestBody Product product){
-        for (Product currProduct : this.theProducts.getAll()){
+        for (Product currProduct : this.theProducts.getAll(product.getCategory())){
             if (currProduct.getName().equals(product.getName())){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product already exists");
             }
@@ -45,13 +49,13 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public Product editProduct(@PathVariable(name = "id") int id, @RequestBody Product product){
         Product canUpdate = theProducts.getOne(id);
-        boolean productExists = theProducts.getAll().contains(canUpdate);
+        boolean productExists = theProducts.getAll(product.getCategory()).contains(canUpdate);
         if (!productExists){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Product doesn't exists");
         }
 
-        for (Product currProduct : theProducts.getAll()){
+        for (Product currProduct : theProducts.getAll(product.getCategory())){
             if (currProduct.getName().equals(product.getName())){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Product with same name exists");
