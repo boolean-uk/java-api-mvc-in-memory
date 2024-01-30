@@ -19,31 +19,41 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody Product product) {
-
         return this.theProducts.create(product);
     }
     @GetMapping
-    public ArrayList<Product> getAll() {
-
-        return this.theProducts.getAll();
+    public ArrayList<Product> getAll(@RequestParam String category) {
+        if(this.theProducts.getAll(category).isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category doesnt exist!");
+        }
+        return this.theProducts.getAll(category);
     }
 
     @GetMapping("/{id}")
     public Product getOne(@PathVariable(name = "id") int id) {
-
-        return this.theProducts.getOne(id);
+        Product product = this.theProducts.getOne(id);
+        if (product == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "That product is unfortunately not in the list");
+        }
+        return product;
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Product update(@PathVariable(name = "id") int id,@RequestBody Product product) {
-
-        return this.theProducts.update(id,product);
+        Product author1 = this.theProducts.update(id,product);
+        if (author1 == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't update the product, because it does not exist");
+        }
+        return author1;
     }
 
     @DeleteMapping("/{id}")
     public Product delete(@PathVariable (name = "id") int id) {
-
-        return this.theProducts.delete(id);
+        Product product = this.theProducts.delete(id);
+        if (product == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found in the list");
+        }
+        return product;
     }
 }
