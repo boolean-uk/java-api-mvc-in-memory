@@ -23,13 +23,28 @@ public class ProductRepository {
         return null;
     }
 
-    public void addProduct(Product product){
+    public boolean addProduct(Product product){
+        if (getProductByName(product.getName()) != null){
+            return false;
+        }
+
         products.add(product);
+
+        return true;
     }
 
     public Product deleteProduct(int id){
         int index = products.indexOf(getProduct(id));
 
         return products.remove(index);
+    }
+
+    public Product getProductByName(String name){
+        for (Product product : products){
+            if (product.getName().equals(name)){
+                return product;
+            }
+        }
+        return null;
     }
 }

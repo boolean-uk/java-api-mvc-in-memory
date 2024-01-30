@@ -2,8 +2,10 @@ package com.booleanuk.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("products")
@@ -15,19 +17,31 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getAll(){
-        return products.getProducts();
+    public List<Product> getAll(@RequestParam String category){
+        return products.getProducts().stream()
+                .filter(product -> product.getCategory().equals(category))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public Product getOne(@PathVariable int id){
-        return products.getProduct(id);
+        Product product = products.getProduct(id);
+
+        if (product == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        return product;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody Product product){
-        products.addProduct(product);
+        boolean isAdded = products.addProduct(product);
+
+        if (!isAdded){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already exists.");
+        }
 
         return products.getProduct(product.getId());
     }
@@ -37,22 +51,25 @@ public class ProductController {
     public Product update(@PathVariable int id, @RequestBody Product updated){
         Product product = products.getProduct(id);
 
-        if (product != null){
-            product.setName(updated.getName());
-            product.setCategory(updated.getCategory());
-            product.setPrice(updated.getPrice());
-
-            return products.getProduct(id);
+        if (product == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } else if (products.getProductByName(updated.getName()) != null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Another product exists with this name.");
         }
-        return null;
+
+        product.setName(updated.getName());
+        product.setCategory(updated.getCategory());
+        product.setPrice(updated.getPrice());
+
+        return products.getProduct(id);
     }
 
     @DeleteMapping("/{id}")
     public Product delete(@PathVariable int id){
-        if (products.getProduct(id) != null){
-            return products.deleteProduct(id);
+        if (products.getProduct(id) == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
-        return null;
+        return products.deleteProduct(id);
     }
 }

@@ -1,7 +1,7 @@
 package com.booleanuk.api;
 
 public class Product {
-    private int idCounter = 0;
+    private static int idCounter = 0;
     private final int id;
     private String name;
     private String category;
