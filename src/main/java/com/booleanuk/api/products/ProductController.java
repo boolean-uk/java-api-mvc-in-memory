@@ -18,11 +18,12 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Product> getAll(@RequestParam String category) {
+    public List<Product> getAll(@RequestParam(required = false) String category) {
         if(this.theProducts.getAll().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "List is empty");
         }
-        if(category.isEmpty()) {
+
+        if(category == null) {
             return this.theProducts.getAll();
         }
         return this.theProducts.getAllWithCategory(category);
