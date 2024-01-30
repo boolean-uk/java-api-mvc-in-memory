@@ -22,7 +22,7 @@ public class ProductController {
         return this.theProducts.create(product);
     }
     @GetMapping
-    public ArrayList<Product> getAll(@RequestParam String category) {
+    public ArrayList<Product> getAll(@RequestParam(required = false) String category) {
         if(this.theProducts.getAll(category).isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category doesnt exist!");
         }

@@ -25,9 +25,9 @@ public class ProductRepository {
     }
     public ArrayList<Product> getAll(String category){
         //Check for presenting the list
-        if(category.isEmpty() && products.size() != 0){
+        if(category == null && products.size() != 0){
             return this.products;
-        }else if(category.isEmpty() && products.size() == 0){
+        }else if(category == null && products.size() == 0){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The list is empty!");
         }
 
