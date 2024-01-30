@@ -4,7 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("products")
@@ -16,7 +17,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ArrayList<Product> getAll() {
+    public List<Product> getAll() {
         return this.theProducts.getAll();
     }
 
@@ -31,18 +32,18 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product createAuthor(@RequestBody Product author){
+    public Product createProduct(@RequestBody Product author){
         return this.theProducts.create(author);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Product editAuthor(@PathVariable(name = "id") int id, @RequestBody Product author){
+    public Product editProduct(@PathVariable(name = "id") int id, @RequestBody Product author){
         return this.theProducts.edit(id, author);
     }
 
     @DeleteMapping("/{id}")
-    public Product deleteAuthor(@PathVariable(name="id") int id){
+    public Product deleteProduct(@PathVariable(name="id") int id){
         return this.theProducts.delete(id);
     }
 
