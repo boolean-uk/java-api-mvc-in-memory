@@ -2,6 +2,8 @@ package com.booleanuk.api.products;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ProductRepository {
     private int idCounter = 1;
@@ -13,6 +15,11 @@ public class ProductRepository {
     }
 
     public  List<Product> findAll() { return this.data; }
+    public  List<Product> findAll(String category) {
+        Stream<Product> productStream = data.stream() // Should learn to use stream() properly
+                .filter(product -> product.getCategory().equalsIgnoreCase(category));
+        return productStream.collect(Collectors.toList());
+    }
 
     public Product find(int id) {
         return this.data.stream()
@@ -36,5 +43,20 @@ public class ProductRepository {
         product.setCategory(updatedProduct.getCategory());
         product.setPrice(updatedProduct.getPrice());
         return product;
+    }
+
+    public boolean nameInData(String name) {
+         return data.stream() // Should learn to use stream() properly
+                .anyMatch(product -> product.getName().equalsIgnoreCase(name));
+    }
+
+    public boolean categoryInData(String category) {
+        return data.stream() // Should learn to use stream() properly
+                .anyMatch(product -> product.getCategory().equalsIgnoreCase(category));
+    }
+
+    public boolean idInData(int id) {
+        return data.stream()
+                .anyMatch(product -> product.getId() == id);
     }
 }
