@@ -41,4 +41,14 @@ public class ProductController {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found.");
     }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Product getSpecific(@PathVariable(name = "id") int id) {
+        Product product = this.theProducts.getSpecific(id);
+        if (product != null) {
+            return product;
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found.");
+    }
 }

@@ -29,4 +29,8 @@ public class ProductRepository {
     public List<Product> getAll(String category) {
         return this.products.stream().filter(p->p.getCategory().equalsIgnoreCase(category)).toList();
     }
+
+    public Product getSpecific(int id) {
+        return this.products.stream().filter(p -> p.getId() == id).findFirst().orElse(null);
+    }
 }
