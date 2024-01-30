@@ -29,6 +29,13 @@ public class ProductController {
         return this.productRepository.getAll();
     }
 
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public List<Product> getProducts(@RequestParam String category) {
+        return this.productRepository.getAll(category);
+    }
+
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public Product getOne(@PathVariable (name = "id") int id) {

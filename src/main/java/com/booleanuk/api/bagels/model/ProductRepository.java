@@ -14,14 +14,23 @@ public class ProductRepository {
 
     public List<Product> getAll() {
         if(products.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found.");
         }
         return this.products;
     }
 
+    public List<Product> getAll(String category) {
+
+        List<Product> products1 = this.products.stream().filter((p) -> p.getCategory().equalsIgnoreCase(category)).toList();
+        if(products1.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No products of the provided category were found.");
+        }
+        return products1;
+    }
+
     public Product postOne(Product product) {
         if(this.products.contains(product)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists.");
         }
         this.products.add(product);
         return product;
@@ -34,14 +43,14 @@ public class ProductRepository {
             }
         }
 
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found.");
     }
 
     public Product putOne(int id, Product product) {
 
         for(Product prod : this.products) {
             if(prod.getName().equalsIgnoreCase(product.getName())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists.");
             }
             if(prod.getId() == id) {
                 prod.setName(product.getName());
@@ -51,7 +60,7 @@ public class ProductRepository {
             }
         }
 
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found.");
     }
 
     public Product deleteOne(int id) {
@@ -62,6 +71,6 @@ public class ProductRepository {
             }
         }
 
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found.");
     }
 }
