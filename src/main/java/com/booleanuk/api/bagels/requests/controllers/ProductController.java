@@ -18,11 +18,13 @@ public class ProductController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<Product> getAll() {
         return this.theProducts.getAll();
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Product getOne(@PathVariable int id) {
         return theProducts.getOne(id);
     }
