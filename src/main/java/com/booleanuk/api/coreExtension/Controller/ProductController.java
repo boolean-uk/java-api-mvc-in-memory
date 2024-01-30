@@ -21,14 +21,16 @@ public class ProductController {
     }
     @GetMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<ArrayList<Product>> getAll(@RequestParam(value="category") String category) {
-        if (this.theProducts.getCategory(category) == null){
-            if (this.theProducts.getAll() == null){
-                throw new ResponseStatusException(HttpStatus.valueOf(404), "Not found.");
-            }
+    public ResponseEntity<ArrayList<Product>> getAll(@RequestParam(value = "category", required = false) String category) {
+        if (category == null || category.isEmpty()) {
             return ResponseEntity.ok(this.theProducts.getAll());
+        } else {
+            ArrayList<Product> categoryProducts = this.theProducts.getCategory(category);
+            if (categoryProducts.isEmpty()){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No products found in the given category.");
+            }
+            return ResponseEntity.ok(categoryProducts);
         }
-        return ResponseEntity.ok(this.theProducts.getCategory(category));
     }
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -39,22 +41,34 @@ public class ProductController {
         return ResponseEntity.ok(this.theProducts.getOne(id));
     }
     @PostMapping
-    public Product create(@RequestBody Product product){
-
-        return this.theProducts.create(product);
+    public ResponseEntity<?> create(@RequestBody Product product) {
+        try {
+            Product newProduct = this.theProducts.create(product);
+            return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestBody Product product){
-        if(this.theProducts.isPresent(id)) {
-            if (theProducts.getNamesAndId(product.getName(), id)){
-                throw new ResponseStatusException(HttpStatus.valueOf(400), "Product already exists");
-            }
-            return ResponseEntity.ok(this.theProducts.updateProduct(id, product));
+    public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestBody Product product) {
+        if (!this.theProducts.isPresent(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found.");
         }
-        throw new ResponseStatusException(HttpStatus.valueOf(404), "Not found.");
+        if (this.theProducts.getNamesAndId(product.getName(), id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists");
+        }
+        Product updatedProduct = this.theProducts.updateProduct(id, product);
+        if (updatedProduct == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found.");
+        }
+        return ResponseEntity.ok(updatedProduct);
     }
     @DeleteMapping("/{id}")
-    public List<Product> deleteproduct(@PathVariable int id){
-        return this.theProducts.deleteProduct(id);
+    public ResponseEntity<?> deleteProduct(@PathVariable int id) {
+        List<Product> updatedList = this.theProducts.deleteProduct(id);
+        if (updatedList == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found.");
+        }
+        return ResponseEntity.ok(updatedList);
     }
 }

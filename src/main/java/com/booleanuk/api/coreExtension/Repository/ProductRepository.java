@@ -24,21 +24,21 @@ public class ProductRepository {
         }
         return this.products;
     }
+
     public ArrayList<Product> getCategory(String category) {
+        ArrayList<Product> filteredProducts = new ArrayList<>();
         for (Product product : this.products) {
-            if (product.getCategory().equals(category)) {
-                return product;
+            if (product.getCategory().equalsIgnoreCase(category)) {
+                filteredProducts.add(product);
             }
-            return null;
         }
-        return null;
+        return filteredProducts;
     }
     public Boolean isPresent(int id) {
         for (Product product : this.products) {
             if (product.getId() == id) {
                 return true;
             }
-            return false;
         }
         return false;
     }
@@ -52,40 +52,45 @@ public class ProductRepository {
     }
     public Boolean getNamesAndId(String name, int id) {
         for (Product product : this.products) {
-            if (Objects.equals(product.getName(), name) && !Objects.equals(product.getId(), id));
-            return false;
+            if (product.getName().equalsIgnoreCase(name) && product.getId() != id) {
+                return true;
+            }
         }
-        return true;
+        return false;
     }
     public Product create(Product product) {
+        for (Product existingProduct : this.products) {
+            if (existingProduct.getName().equalsIgnoreCase(product.getName())) {
+                throw new IllegalArgumentException("Product with provided name already exists");
+            }
+        }
         this.products.add(product);
         return product;
     }
     public Product updateProduct(int id, Product product) {
-        for (Product product1 : this.products) {
-            if (product1.getId() == id) {
-                product1.setName(product.getName());
-                product1.setCategory(product.getCategory());
-                product1.setPrice(product.getPrice());
-                return product1;
+        for (Product existingProduct : this.products) {
+            if (existingProduct.getId() == id) {
+                existingProduct.setName(product.getName());
+                existingProduct.setCategory(product.getCategory());
+                existingProduct.setPrice(product.getPrice());
+                return existingProduct;
             }
         }
         return null;
     }
     public List<Product> deleteProduct(int id) {
         Product productToRemove = null;
-        for (Product product1 : this.products) {
-            if (product1.getId() == id) {
-                productToRemove = product1;
+        for (Product product : this.products) {
+            if (product.getId() == id) {
+                productToRemove = product;
                 break;
             }
         }
         if (productToRemove != null) {
             this.products.remove(productToRemove);
-            return this.products;
+            return new ArrayList<>(this.products); // Returning a copy of the list
         } else {
             return null;
         }
-
     }
 }
