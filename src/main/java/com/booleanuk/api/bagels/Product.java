@@ -1,13 +1,14 @@
 package com.booleanuk.api.bagels;
 
 public class Product {
+    private static int nextID = 0;
     private int id;
     private String name;
     private String category;
     private int price;
 
-    public Product(int id, String name, String category, int price) {
-        this.id = id;
+    public Product(String name, String category, int price) {
+        this.id = nextID++;
         this.name = name;
         this.category = category;
         this.price = price;
@@ -15,6 +16,10 @@ public class Product {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
