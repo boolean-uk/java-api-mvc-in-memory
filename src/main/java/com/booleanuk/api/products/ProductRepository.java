@@ -12,8 +12,18 @@ public class ProductRepository {
         this.products.add(new Product("Onion bagel", "Food", 20));
     }
 
-    public List<Product> getAll() {
-        return products;
+    public List<Product> getAll(String category) {
+        if(category == null) {
+            return products;
+        }
+        ArrayList<Product> productsOfCategory = new ArrayList<>();
+
+        for(Product product: products) {
+            if(product.getCategory().equalsIgnoreCase(category)) {
+                productsOfCategory.add(product);
+            }
+        }
+        return productsOfCategory;
     }
 
     public Product getOne(int id) {
@@ -46,6 +56,15 @@ public class ProductRepository {
         for(int i = 0; i < products.size(); i++) {
             if(products.get(i).getId() == id) {
                 return products.remove(i);
+            }
+        }
+        return null;
+    }
+
+    public Product getProductWithName(String name) {
+        for(Product product: products) {
+            if(product.getName().equalsIgnoreCase(name)) {
+                return product;
             }
         }
         return null;
