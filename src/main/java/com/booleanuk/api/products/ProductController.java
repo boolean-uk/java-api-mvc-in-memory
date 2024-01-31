@@ -42,11 +42,17 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public Product getSpecific(@PathVariable int id) {
+        if(this.repository.idInData(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         return this.repository.find(id);
     }
 
     @DeleteMapping("/{id}")
     public Product removeProduct(@PathVariable int id) {
+        if(this.repository.idInData(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         return this.repository.remove(id);
     }
 
