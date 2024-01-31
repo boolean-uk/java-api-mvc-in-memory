@@ -1,20 +1,35 @@
 package com.booleanuk.api.bagels.models;
 
 public class Product {
-    private static int counter = 0;
-    private int id;
+    private Long id;
     private String name;
     private String category;
     private int price;
 
-    public Product(){
-
+    public Product() {
     }
-    public Product(String name, int price, String category) {
-        this.id = counter++;
-        this.category = category;
+
+    public Product(Long id, String name, String category, int price) {
+        this.id = id;
         this.name = name;
+        this.category = category;
         this.price = price;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCategory() {
@@ -25,27 +40,21 @@ public class Product {
         this.category = category;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public int getPrice() {
+        return price;
     }
 
     public void setPrice(int price) {
         this.price = price;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getPrice() {
-        return price;
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", price=" + price +
+                '}';
     }
 }
