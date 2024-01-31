@@ -1,80 +1,62 @@
-package com.booleanuk.api.controller;
+package com.booleanuk.api.bagels.controller;
 
 import com.booleanuk.api.models.Product;
-import com.booleanuk.api.repository.ProductRepository;
+import com.booleanuk.api.bagels.repository.ProductRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("products")
+@RequestMapping("/products")
 public class ProductController {
-
     private final ProductRepository productRepository;
 
-    public ProductController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-
-    @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-        validateCreateProductRequest(product);
-
-        return productRepository.create(product);
+    public ProductController() {
+        this.productRepository = new ProductRepository();
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getProducts() {
-        List<Product> products = productRepository.findAll();
-        return new ResponseEntity<>(products, HttpStatus.OK);
+    public List<Product> getAll(@RequestParam(required = false) String category) {
+        List<Product> products = category == null ? this.productRepository.getAll() :
+                this.productRepository.getAll().stream()
+                        .filter(p -> p.getCategory().equalsIgnoreCase(category))
+                        .collect(Collectors.toList());
+        if (products.isEmpty() && category != null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No products found in the specified category.");
+        }
+        return products;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product create(@RequestBody Product product) {
+        if (product.getName() == null || product.getCategory() == null || product.getPrice() == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid product details");
+        }
+
+        return this.productRepository.create(product)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product already exists"));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getSpecificProduct(@PathVariable Long id) {
-        Product product = productRepository.findById(id);
-
-        if (product != null) {
-            return new ResponseEntity<>(product, HttpStatus.OK);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
-        }
+    public Product getProductById(@PathVariable int id) {
+        return this.productRepository.getProductById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        validateCreateProductRequest(product);
-
-        Product existingProduct = productRepository.findById(id);
-        if (existingProduct != null) {
-            existingProduct.setName(product.getName());
-            existingProduct.setCategory(product.getCategory());
-            existingProduct.setPrice(product.getPrice());
-
-            productRepository.update(existingProduct);
-            return new ResponseEntity<>(existingProduct, HttpStatus.OK);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
-        }
+    public Product update(@PathVariable int id, @RequestBody Product product) {
+        return this.productRepository.update(id, product)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        if (productRepository.deleteById(id)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
-        }
-    }
-
-    private void validateCreateProductRequest(Product product) {
-        if (product == null ||
-                product.getName() == null ||
-                product.getCategory() == null ||
-                product.getPrice() < 0) {
-            throw new IllegalArgumentException("Invalid product creation request");
-        }
+    @ResponseStatus(HttpStatus.OK)
+    public Product delete(@PathVariable int id) {
+        return this.productRepository.delete(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
     }
 }
