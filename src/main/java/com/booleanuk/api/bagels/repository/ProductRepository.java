@@ -5,44 +5,48 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ProductRepository {
+    private final List<Product> products;
 
-    private List<Product> products;
-    public ProductRepository(){
+    public ProductRepository() {
         this.products = new ArrayList<>();
+        this.products.add(new Product("Book Title", 1500, "Book"));
+        this.products.add(new Product("Shirt", 2000, "Clothing"));
+    }
 
-        this.products.add(new Product("Ateeb",10,"book"));
-        this.products.add(new Product("Hassan",20,"clothing"));
-        this.products.add(new Product("Noha",30,"sport"));
+    public List<Product> getAll() {
+        return this.products;
     }
-    public List<Product> getAll(){
-        return  this.products;
-    }
-    public Product created(Product author){
-        this.products.add(author);
-        return author;
-    }
-    public Product getOneAuthor( int id){
-        if ( id < this.products.size()){
-            return this.products.get(id);
+
+    public Optional<Product> create(Product product) {
+        if (products.stream().anyMatch(p -> p.getName().equalsIgnoreCase(product.getName()))) {
+            return Optional.empty();
         }
-        return null;
+        products.add(product);
+        return Optional.of(product);
     }
-    public Product update( int id, Product author){
-        if (id < this.products.size()){
-            this.products.get(id).setType(author.getType());
-            this.products.get(id).setPrice(author.getPrice());
-            this.products.get(id).setCategory(author.getCategory());
-            return this.products.get(id);
-        }
-        return null;
+
+    public Optional<Product> getProductById(int id) {
+        return products.stream()
+                .filter(p -> p.getId() == id)
+                .findFirst();
     }
-    public Product delete( int id){
-        if (id < this.products.size()){
-            return this.products.remove(id);
-        }
-        return null;
+
+    public Optional<Product> update(int id, Product updatedProduct) {
+        return getProductById(id).map(product -> {
+            product.setName(updatedProduct.getName());
+            product.setCategory(updatedProduct.getCategory());
+            product.setPrice(updatedProduct.getPrice());
+            return product;
+        });
+    }
+
+    public Optional<Product> delete(int id) {
+        Optional<Product> product = getProductById(id);
+        product.ifPresent(products::remove);
+        return product;
     }
 }

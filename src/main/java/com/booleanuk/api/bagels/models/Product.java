@@ -7,6 +7,9 @@ public class Product {
     private String category;
     private int price;
 
+    public Product(){
+
+    }
     public Product(String name, int price, String category) {
         this.id = counter++;
         this.category = category;
@@ -26,8 +29,8 @@ public class Product {
         this.id = id;
     }
 
-    public void setType(String type) {
-        this.name = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setPrice(int price) {
@@ -38,7 +41,7 @@ public class Product {
         return id;
     }
 
-    public String getType() {
+    public String getName() {
         return name;
     }
 
