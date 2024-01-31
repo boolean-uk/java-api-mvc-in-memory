@@ -1,10 +1,12 @@
-package com.booleanuk.api.bagels.repository;
+package com.booleanuk.api.repository;
 
-import com.booleanuk.api.bagels.models.Product;
+import com.booleanuk.api.models.Product;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ProductRepository {
 
     private final List<Product> products = new ArrayList<>();

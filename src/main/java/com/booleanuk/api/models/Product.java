@@ -1,4 +1,4 @@
-package com.booleanuk.api.bagels.models;
+package com.booleanuk.api.models;
 
 public class Product {
     private Long id;

@@ -1,4 +1,4 @@
-package com.booleanuk.api.bagels.models;
+package com.booleanuk.api;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

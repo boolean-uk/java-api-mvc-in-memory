@@ -1,7 +1,7 @@
-package com.booleanuk.api.bagels.controller;
+package com.booleanuk.api.controller;
 
-import com.booleanuk.api.bagels.models.Product;
-import com.booleanuk.api.bagels.repository.ProductRepository;
+import com.booleanuk.api.models.Product;
+import com.booleanuk.api.repository.ProductRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +20,10 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public Product createProduct(@RequestBody Product product) {
         validateCreateProductRequest(product);
 
-        Product createdProduct = productRepository.create(product);
-
-        return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+        return productRepository.create(product);
     }
 
     @GetMapping
