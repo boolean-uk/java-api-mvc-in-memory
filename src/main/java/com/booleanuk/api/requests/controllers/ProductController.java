@@ -37,28 +37,21 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Product> getAll() {
-        List<Product> allProducts = this.repository.findAll();
+    public List<Product> getAll(@RequestParam(required = false) String category) {
+        List<Product> allProducts = null;
 
-        if(allProducts == null) {
+        if(category == null) {
+            allProducts = this.repository.findAll();
+        }
+        else {
+            allProducts = this.repository.findAllOfSpecificCategory(category);
+        }
+
+        if (allProducts == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No products were found.");
         }
 
         return allProducts;
-    }
-
-    @GetMapping("/category/{category}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Product> getAllInSpecificCategory(@PathVariable String category) {
-        validateString(category);
-
-        List<Product> productsOfSpecificCategory = this.repository.findAllOfSpecificCategory(category);
-
-        if(productsOfSpecificCategory == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No products of the provided category were found.");
-        }
-
-        return productsOfSpecificCategory;
     }
 
     @GetMapping("/{id}")
