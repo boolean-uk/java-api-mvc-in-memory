@@ -18,6 +18,10 @@ public class ProductController {
     }
 
 
+    @RequestMapping("/hello")
+    public String hello() {
+        return "Hiya";
+    }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product createProduct(@RequestBody Product productToBeCreated) {
