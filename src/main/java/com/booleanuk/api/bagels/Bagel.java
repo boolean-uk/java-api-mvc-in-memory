@@ -22,4 +22,12 @@ public class Bagel {
     public int getPrice() {
         return price;
     }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 }
