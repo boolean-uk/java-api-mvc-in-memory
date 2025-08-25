@@ -1,4 +1,4 @@
-package com.booleanuk.api.bagels;
+package com.booleanuk.api.bagels.model.pojo;
 
 public class Bagel {
     private int id;
