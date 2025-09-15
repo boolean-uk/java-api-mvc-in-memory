@@ -23,7 +23,7 @@ public class ProductRepository {
         return this.data.stream()
                 .filter(product -> product.getId() == id)
                 .findFirst()
-                .orElseThrow();
+                .orElse(null);
     }
 
     public Product deleteProduct(int id){
