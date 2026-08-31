@@ -5,6 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.booleanuk.api.product.repo.ProductRepository;
+import com.booleanuk.api.product.exeption.ResourceNotFoundException;
+import com.booleanuk.api.product.exeption.InputNotValidException;
+import com.booleanuk.api.product.exeption.AlreadyExistsException;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -26,11 +30,11 @@ public class ProductService{
 
 	public ResponseEntity<Product> createProduct(String name, String category, int price){
 		if(price < 0)
-			return ResponseEntity.unprocessableEntity().body(null);
+			throw new InputNotValidException("Price cannot be negative");
 		else if(name.isBlank() || category.isBlank())
-			return ResponseEntity.unprocessableEntity().body(null);
+			throw new InputNotValidException("Cannot be empty or blank");
 		else if(this.productRepo.isProduct(name))
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			throw new AlreadyExistsException("Product with name allready exists");
 			
 		Product prod = this.productRepo.createProduct(name, category, price);
 		
@@ -40,22 +44,22 @@ public class ProductService{
 	public ResponseEntity<Product> getProduct(int id){
 		Optional<Product> optionalProd = this.productRepo.getOne(id);
 		if(optionalProd.isEmpty())
-			return ResponseEntity.notFound().build();
+			throw new ResourceNotFoundException("Product not found");
 
 		return ResponseEntity.ok(optionalProd.get());
 	}
 
 	public ResponseEntity<Product> putProduct(int id, String name, String category, int price){
 		if(price < 0)
-			return ResponseEntity.unprocessableEntity().body(null);
+			throw new InputNotValidException("Price cannot be negative");
 		else if(name.isBlank() || category.isBlank())
-			return ResponseEntity.unprocessableEntity().body(null);
+			throw new InputNotValidException("Cannot be empty or blank");
 		else if(this.productRepo.isProduct(name))
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			throw new AlreadyExistsException("Product with name allready exists");
 		
 		Optional<Product> optionalProd = this.productRepo.putOne(id, name, category, price);
 		if(optionalProd.isEmpty())
-			return ResponseEntity.notFound().build();
+			throw new ResourceNotFoundException("Product not found");
 
 		return ResponseEntity.ok(optionalProd.get());
 	}
@@ -63,7 +67,7 @@ public class ProductService{
 	public ResponseEntity<Product> deleteProduct(int id){
 		Optional<Product> optionalProd = this.productRepo.deleteOne(id);
 		if(optionalProd.isEmpty())
-			return ResponseEntity.notFound().build();
+			throw new ResourceNotFoundException("Product not found");
 
 		return ResponseEntity.ok(optionalProd.get());
 	}

@@ -1,4 +1,3 @@
-
 package com.booleanuk.api.product.model;
 
 public class ProductCreateDto {
