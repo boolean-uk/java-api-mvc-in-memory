@@ -28,7 +28,15 @@ public class ProductService{
 		return this.productRepo.getAll();
 	}
 
-	public ResponseEntity<Product> createProduct(String name, String category, int price){
+	public List<Product> getAllProduct(String category){
+		Optional<List<Product>> res = this.productRepo.getAll(category);
+		if(res.isEmpty())
+			throw new ResourceNotFoundException("No category called \"" + category + "\"");
+
+		return res.get();
+	}
+
+	public Product createProduct(String name, String category, int price){
 		if(price < 0)
 			throw new InputNotValidException("Price cannot be negative");
 		else if(name.isBlank() || category.isBlank())
@@ -38,18 +46,18 @@ public class ProductService{
 			
 		Product prod = this.productRepo.createProduct(name, category, price);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(prod);
+		return prod;
 	}
 
-	public ResponseEntity<Product> getProduct(int id){
+	public Product getProduct(int id){
 		Optional<Product> optionalProd = this.productRepo.getOne(id);
 		if(optionalProd.isEmpty())
 			throw new ResourceNotFoundException("Product not found");
 
-		return ResponseEntity.ok(optionalProd.get());
+		return optionalProd.get();
 	}
 
-	public ResponseEntity<Product> putProduct(int id, String name, String category, int price){
+	public Product putProduct(int id, String name, String category, int price){
 		if(price < 0)
 			throw new InputNotValidException("Price cannot be negative");
 		else if(name.isBlank() || category.isBlank())
@@ -61,15 +69,15 @@ public class ProductService{
 		if(optionalProd.isEmpty())
 			throw new ResourceNotFoundException("Product not found");
 
-		return ResponseEntity.ok(optionalProd.get());
+		return optionalProd.get();
 	}
 
-	public ResponseEntity<Product> deleteProduct(int id){
+	public Product deleteProduct(int id){
 		Optional<Product> optionalProd = this.productRepo.deleteOne(id);
 		if(optionalProd.isEmpty())
 			throw new ResourceNotFoundException("Product not found");
 
-		return ResponseEntity.ok(optionalProd.get());
+		return optionalProd.get();
 	}
 
 }

@@ -22,6 +22,17 @@ public class ProductRepository{
 		return this.products;
 	}
 
+	public Optional<List<Product>> getAll(String category){
+		List<Product> tmp = new ArrayList<Product>();
+		for (Product p : this.products){
+			if(p.getCategory().equals(category))
+				tmp.add(p);
+		}
+		if(tmp.isEmpty())
+			return Optional.empty();
+		return Optional.of(tmp);
+	}
+
 	public Product createProduct(String name, String category, int price){
 		Product product = new Product(name, category, price);
 		this.products.add(product);

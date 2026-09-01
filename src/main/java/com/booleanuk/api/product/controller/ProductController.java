@@ -1,5 +1,6 @@
 package com.booleanuk.api.product.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,34 +27,45 @@ public class ProductController{
 		this.productService = productService;
 	}
 
+	// @GetMapping
+	// public ResponseEntity<List<Product>> getAllProduct(){
+	// 	List<Product> prods = this.productService.getAllProduct();
+	// 	return ResponseEntity.ok(prods);
+	// }
+
 	@GetMapping
-	public ResponseEntity<List<Product>> getAllProduct(){
-		List<Product> prods = this.productService.getAllProduct();
+	public ResponseEntity<List<Product>> getAllProduct(@RequestParam (required = false) String category){
+		List<Product> prods;
+		if(category == null)
+			prods = this.productService.getAllProduct();
+		else
+			prods = this.productService.getAllProduct(category);
+
 		return ResponseEntity.ok(prods);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Product> getProduct(@PathVariable int id){
-		ResponseEntity<Product> res = this.productService.getProduct(id);
-		return res;
+		Product res = this.productService.getProduct(id);
+		return ResponseEntity.ok(res);
 	}
 
 	@PostMapping
 	public ResponseEntity<Product> createProduct(@RequestBody ProductCreateDto productDto){
-		ResponseEntity<Product> res = this.productService.createProduct(productDto.getName(), productDto.getCategory(), productDto.getPrice());
-		return res;
+		Product res = this.productService.createProduct(productDto.getName(), productDto.getCategory(), productDto.getPrice());
+		return ResponseEntity.status(HttpStatus.CREATED).body(res);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Product> putProduct(@PathVariable int id, @RequestBody ProductCreateDto productDto){
-	ResponseEntity<Product> res = this.productService.putProduct(id, productDto.getName(), productDto.getCategory(), productDto.getPrice());
-		return res;
+	Product res = this.productService.putProduct(id, productDto.getName(), productDto.getCategory(), productDto.getPrice());
+		return ResponseEntity.ok(res);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Product> deleteProduct(@PathVariable int id){
-		ResponseEntity<Product> res = this.productService.deleteProduct(id);
-		return res;
+		Product res = this.productService.deleteProduct(id);
+		return ResponseEntity.ok(res);
 	}
 
 }
